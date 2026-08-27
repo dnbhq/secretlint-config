@@ -1,6 +1,6 @@
 {
   "name": "@dnbhq/secretlint-config",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shared Secretlint configuration and CLI for DNBHQ projects.",
   "type": "module",
   "license": "MIT",
