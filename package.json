@@ -1,0 +1,84 @@
+{
+  "name": "@dnbhq/secretlint-config",
+  "version": "0.1.0",
+  "description": "Shared Secretlint configuration and CLI for DNBHQ projects.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "author": "Patrick Kollitsch <davidsneighbourdev+gh@gmail.com> (https://davids-neighbour.com)",
+  "keywords": [
+    "secretlint",
+    "secrets",
+    "linting",
+    "config",
+    "dnbhq"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./config/index.js",
+    "./config": "./config/index.js",
+    "./secretlintrc": "./config/secretlintrc.json",
+    "./secretlintrc.json": "./config/secretlintrc.json"
+  },
+  "bin": {
+    "dnb-secretlint": "./bin/dnb-secretlint.js"
+  },
+  "files": [
+    "bin/",
+    "config/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md"
+  ],
+  "scripts": {
+    "check": "npm run lint && npm run test && npm pack --dry-run",
+    "lint": "npm run lint:code && npm run lint:markdown && npm run lint:secrets",
+    "lint:code": "biome check .",
+    "lint:code:fix": "biome check --write .",
+    "lint:markdown": "markdownlint-cli2 --config ./node_modules/@dnbhq/markdownlint-config/.markdownlint-cli2.jsonc README.md",
+    "lint:markdown:fix": "markdownlint-cli2 --config ./node_modules/@dnbhq/markdownlint-config/.markdownlint-cli2.jsonc --fix README.md",
+    "lint:secrets": "node ./bin/dnb-secretlint.js README.md package.json bin/**/*.js config/**/*.js examples/**/*.js test/**/*.js .github/**/*.yml",
+    "lint:staged": "lint-staged",
+    "prepare": "simple-git-hooks",
+    "release": "release-it --ci",
+    "release:dry": "release-it --dry-run",
+    "test": "node --test",
+    "test:config": "node --test test/config.test.js"
+  },
+  "dependencies": {
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.4",
+    "secretlint": "^13.0.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.0",
+    "@dnbhq/biome-config": "0.2.3",
+    "@dnbhq/markdownlint-config": "0.2.11",
+    "@dnbhq/release-config": "1.1.3",
+    "@release-it/conventional-changelog": "12.0.0",
+    "lint-staged": "17.0.8",
+    "release-it": "21.0.0",
+    "simple-git-hooks": "2.13.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnbhq/secretlint-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dnbhq/secretlint-config/issues"
+  },
+  "homepage": "https://github.com/dnbhq/secretlint-config#readme",
+  "lint-staged": {
+    "*.{js,json,jsonc,yml,yaml}": "biome check --write --no-errors-on-unmatched",
+    "*.{md,mdx}": "markdownlint-cli2 --config ./node_modules/@dnbhq/markdownlint-config/.markdownlint-cli2.jsonc --fix --no-globs",
+    "*.{js,json,jsonc,md,mdx,yml,yaml,txt,cjs,mjs,ts,tsx}": "node ./bin/dnb-secretlint.js --no-glob"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged --allow-empty"
+  }
+}
